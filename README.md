@@ -1,1 +1,1 @@
-{index.html}# siterangweb
+[index.html]# siterangweb
