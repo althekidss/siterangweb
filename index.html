@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Si Terang - Menu & Nutrisi</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --primary-color: #FFC107; --secondary-color: #4CAF50; --accent-color: #03A9F4; --milk-color: #f48fb1; --bg-color: #ECEFF1; --card-bg: #FFFFFF; --text-color: #263238; --text-muted: #546e7a; --shadow-color: rgba(0, 0, 0, 0.1); --border-color: #ddd; }
+        [data-theme="dark"] { --primary-color: #FFD54F; --secondary-color: #81C784; --accent-color: #4FC3F7; --milk-color: #F06292; --bg-color: #121212; --card-bg: #1E1E1E; --text-color: #E0E0E0; --text-muted: #AAA; --shadow-color: rgba(0, 0, 0, 0.5); --border-color: #333; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Nunito', sans-serif; background-color: var(--bg-color); color: var(--text-color); overflow-x: hidden; transition: background-color 0.3s ease, color 0.3s ease; }
+        h1, h2, h3 { font-family: 'Poppins', sans-serif; font-weight: 800; color: var(--text-color); }
+        .animated-bg { position: fixed; width: 100%; height: 100%; top: 0; left: 0; z-index: -2; background: linear-gradient(135deg, var(--primary-color), var(--secondary-color), var(--accent-color)); background-size: 600% 600%; animation: gradientShift 25s ease infinite; opacity: 0.1; }
+        @keyframes gradientShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        .navbar { background-color: var(--card-bg); box-shadow: 0 2px 10px var(--shadow-color); padding: 15px 0; position: sticky; top: 0; z-index: 1000; transition: background-color 0.3s ease; }
+        .navbar .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; display: flex; justify-content: space-between; align-items: center; }
+        .navbar .logo { font-size: 1.8rem; font-weight: 900; background: linear-gradient(45deg, var(--primary-color), var(--accent-color)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: flex; align-items: center; gap: 10px; }
+        .nav-controls { display: flex; align-items: center; gap: 30px; }
+        .nav-links { list-style: none; display: flex; gap: 20px; }
+        .nav-links a { text-decoration: none; color: var(--text-color); font-weight: 700; transition: color 0.3s ease; cursor: pointer; }
+        .nav-links a:hover, .nav-links a.active { color: var(--primary-color); }
+        .theme-switch-wrapper { display: flex; align-items: center; }
+        .theme-switch { display: none; }
+        .theme-switch-label { position: relative; display: block; width: 60px; height: 30px; background-color: var(--border-color); border-radius: 30px; cursor: pointer; transition: background-color 0.3s ease; }
+        .theme-switch-label .ball { position: absolute; top: 3px; left: 3px; width: 24px; height: 24px; background-color: var(--card-bg); border-radius: 50%; transition: transform 0.3s ease; display: flex; align-items: center; justify-content: center; font-size: 12px; }
+        .theme-switch:checked + .theme-switch-label { background-color: var(--primary-color); }
+        .theme-switch:checked + .theme-switch-label .ball { transform: translateX(30px); }
+        .page-section { display: none; padding: 80px 20px; min-height: 100vh; }
+        .page-section.active { display: block; }
+        .hero { text-align: center; }
+        .hero-title { font-size: 3.5rem; margin-bottom: 20px; background: linear-gradient(45deg, var(--primary-color), var(--accent-color), var(--secondary-color)); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: gradientText 3s ease infinite; }
+        @keyframes gradientText { to { background-position: 200% center; } }
+        .hero-subtitle { font-size: 1.2rem; color: var(--text-muted); max-width: 600px; margin: 0 auto 40px auto; }
+        .menu-showcase { max-width: 1000px; margin: 0 auto; }
+        .menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
+        .menu-item-card { background-color: var(--card-bg); padding: 25px; border-radius: 20px; box-shadow: 0 5px 15px var(--shadow-color); display: flex; align-items: center; gap: 20px; transition: all 0.3s ease; opacity: 0; transform: translateY(30px); }
+        .menu-item-card.animate-on-scroll { opacity: 1; transform: translateY(0); }
+        .menu-item-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px var(--shadow-color); }
+        .menu-item-card i { font-size: 2.5rem; color: var(--primary-color); background-color: var(--bg-color); padding: 15px; border-radius: 50%; min-width: 70px; text-align: center; }
+        .menu-item-card:nth-child(2) i { color: var(--accent-color); }
+        .menu-item-card:nth-child(3) i { color: var(--secondary-color); }
+        .menu-item-card:nth-child(4) i { color: var(--secondary-color); }
+        .menu-item-card:nth-child(5) i { color: var(--milk-color); }
+        .menu-item-card-content h4 { font-size: 1.2rem; font-weight: 700; margin-bottom: 5px; }
+        .menu-item-card-content p { font-size: 1rem; color: var(--text-muted); margin: 0; }
+        .nutrition-summary { max-width: 900px; margin: 80px auto; padding: 50px; background-color: var(--card-bg); border-radius: 30px; box-shadow: 0 10px 30px var(--shadow-color); }
+        .nutrition-summary h2 { text-align: center; font-size: 2.5rem; margin-bottom: 40px; }
+        .summary-calories { text-align: center; font-size: 4rem; font-weight: 900; background: linear-gradient(45deg, var(--primary-color), var(--accent-color)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 40px; }
+        .nutrition-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+        .macro-item, .vitamin-item { opacity: 0; transform: translateY(30px); }
+        .macro-item.animate-on-scroll, .vitamin-item.animate-on-scroll { opacity: 1; transform: translateY(0); }
+        .macro-item { margin-bottom: 25px; }
+        .macro-label { display: flex; justify-content: space-between; margin-bottom: 10px; font-weight: 700; font-size: 1.1rem; }
+        .macro-bar { width: 100%; height: 30px; background-color: var(--border-color); border-radius: 20px; overflow: hidden; }
+        .macro-fill { height: 100%; border-radius: 20px; width: 0; transition: width 1.5s ease; display: flex; align-items: center; justify-content: flex-end; padding-right: 15px; color: #fff; font-weight: bold; }
+        .macro-fill.protein { background: linear-gradient(45deg, var(--accent-color), #29B6F6); }
+        .macro-fill.carbs { background: linear-gradient(45deg, var(--primary-color), #FFD54F); }
+        .macro-fill.fat { background: linear-gradient(45deg, #FFA726, #FFCC80); }
+        .vitamin-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
+        .vitamin-item { display: flex; align-items: center; gap: 15px; padding: 15px; background-color: var(--bg-color); border-radius: 15px; transition: all 0.3s ease; }
+        .vitamin-item:hover { transform: translateY(-5px); }
+        .vitamin-item i { color: var(--secondary-color); font-size: 1.5rem; }
+        .suggestion-form-container { max-width: 700px; margin: 0 auto; padding: 50px; background-color: var(--card-bg); border-radius: 30px; box-shadow: 0 10px 30px var(--shadow-color); }
+        .form-group { margin-bottom: 30px; }
+        .form-group label { display: block; font-weight: 700; margin-bottom: 10px; font-size: 1.1rem; }
+        .form-group input, .form-group textarea { width: 100%; padding: 15px 20px; border: 1px solid var(--border-color); border-radius: 15px; background-color: var(--bg-color); color: var(--text-color); font-family: 'Nunito', sans-serif; font-size: 1rem; transition: all 0.3s ease; }
+        .form-group input:focus, .form-group textarea:focus { outline: none; border-color: var(--primary-color); }
+        .form-group textarea { resize: vertical; min-height: 150px; }
+        #form-status { text-align: center; padding: 15px; border-radius: 10px; margin-top: 20px; font-weight: 600; display: none; }
+        #form-status.success { background-color: #e8f5e9; color: var(--secondary-color); }
+        #form-status.error { background-color: #ffebee; color: #e53935; }
+        .btn { display: inline-block; background: linear-gradient(45deg, var(--primary-color), var(--accent-color)); color: #fff; padding: 18px 40px; border-radius: 50px; text-decoration: none; font-weight: 800; font-size: 1.2rem; border: none; cursor: pointer; transition: all 0.3s ease; }
+        .btn:hover { transform: translateY(-3px); box-shadow: 0 10px 20px var(--shadow-color); }
+        .footer { background-color: var(--card-bg); text-align: center; padding: 40px 20px; margin-top: 80px; box-shadow: 0 -5px 20px var(--shadow-color); }
+        
+        /* --- Style untuk Edukasi Gizi (TAMPILAN RAPI & INTERAKTIF) --- */
+        .edukasi-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        .edukasi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+        }
+        .edukasi-card {
+            background-color: var(--card-bg);
+            border-radius: 20px;
+            box-shadow: var(--shadow-light);
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            opacity: 0;
+            transform: translateY(50px);
+            display: flex;
+            flex-direction: column;
+        }
+        .edukasi-card.animate-on-scroll {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .edukasi-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px var(--shadow-hover);
+        }
+        .edukasi-header {
+            padding: 30px;
+            text-align: center;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: var(--light-text);
+        }
+        .edukasi-icon {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+        .edukasi-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            font-family: 'Poppins', sans-serif;
+        }
+        .edukasi-teaser {
+            padding: 20px;
+            font-size: 1rem;
+            color: var(--text-muted);
+        }
+        .edukasi-link {
+            display: inline-block;
+            margin-top: 10px;
+            color: var(--accent-color);
+            font-weight: 700;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .edukasi-link:hover {
+            text-decoration: underline;
+        }
+        
+        /* --- Style untuk Modal --- */
+        .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; }
+        .modal-content { background-color: var(--card-bg); margin: 20px; padding: 40px; border-radius: 20px; width: 90%; max-width: 800px; position: relative; animation: slideInModal 0.5s ease-out; max-height: 80vh; overflow-y: auto; }
+        @keyframes slideInModal { from { transform: translateY(-80px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .close-btn { position: absolute; top: 15px; right: 20px; font-size: 2.5rem; font-weight: bold; color: #aaa; cursor: pointer; transition: color 0.3s ease; }
+        .close-btn:hover { color: var(--text-color); }
+        .modal-header { display: flex; align-items: center; gap: 20px; margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 20px; }
+        .modal-icon { font-size: 4rem; color: var(--primary-color); }
+        .modal-title { font-size: 2rem; font-weight: 800; font-family: 'Poppins', sans-serif; }
+        .modal-body h4 { font-size: 1.2rem; margin-top: 20px; margin-bottom: 10px; color: var(--primary-color); }
+        .modal-body ul { list-style: none; padding-left: 20px; }
+        .modal-body li { margin-bottom: 10px; line-height: 1.6; }
+        .modal-body strong { color: var(--text-color); }
+        
+        @media (max-width: 768px) { .hero-title { font-size: 2.8rem; } .nav-controls { flex-direction: column; gap: 15px; } .nutrition-grid { grid-template-columns: 1fr; } .edukasi-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="animated-bg"></div>
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">☀️ Si Terang</div>
+            <div class="nav-controls">
+                <ul class="nav-links">
+                    <li><a data-page="beranda" class="nav-link active">Menu Hari Ini</a></li>
+                    <li><a data-page="edukasi" class="nav-link">Edukasi Gizi</a></li>
+                    <li><a data-page="saran" class="nav-link">Saran Digital</a></li>
+                </ul>
+                <div class="theme-switch-wrapper"><input type="checkbox" id="theme-switch" class="theme-switch"><label for="theme-switch" class="theme-switch-label"><span class="ball"><i class="fas fa-moon"></i></span></label></div>
+            </div>
+        </div>
+    </nav>
+    <main>
+        <section id="beranda" class="page-section active">
+            <div class="hero"><h1 class="hero-title">Menu Hari Ini</h1><p class="hero-subtitle">Rangkaian makanan seimbang untuk memberi Anda energi dan nutrisi sepanjang hari.</p></div>
+            <div class="menu-showcase">
+                <div class="menu-grid">
+                    <div class="menu-item-card"><i class="fas fa-bowl-rice"></i><div class="menu-item-card-content"><h4>Nasi Putih</h4><p>Sumber Energi Utama</p></div></div>
+                    <div class="menu-item-card"><i class="fas fa-drumstick-bite"></i><div class="menu-item-card-content"><h4>Ayam Bakar</h4><p>Protein Berkualitas</p></div></div>
+                    <div class="menu-item-card"><i class="fas fa-leaf"></i><div class="menu-item-card-content"><h4>Cap Cay</h4><p>Kaya Serat & Vitamin</p></div></div>
+                    <div class="menu-item-card"><i class="fas fa-apple-whole"></i><div class="menu-item-card-content"><h4>Apel</h4><p>Cemilan Sehat</p></div></div>
+                    <div class="menu-item-card"><i class="fas fa-glass-water"></i><div class="menu-item-card-content"><h4>Susu</h4><p>Sumber Kalsium</p></div></div>
+                </div>
+            </div>
+            <div class="nutrition-summary">
+                <h2>Analisis Gizi Menu Hari Ini</h2>
+                <div class="summary-calories">780 kkal</div>
+                <div class="nutrition-grid">
+                    <div>
+                        <h3 style="margin-bottom: 20px;">Makronutrien</h3>
+                        <div class="macro-item"><div class="macro-label"><span>Protein</span><span>45g</span></div><div class="macro-bar"><div class="macro-fill protein" style="width:60%"></div></div></div>
+                        <div class="macro-item"><div class="macro-label"><span>Karbohidrat</span><span>95g</span></div><div class="macro-bar"><div class="macro-fill carbs" style="width:75%"></div></div></div>
+                        <div class="macro-item"><div class="macro-label"><span>Lemak</span><span>20g</span></div><div class="macro-bar"><div class="macro-fill fat" style="width:25%"></div></div></div>
+                    </div>
+                    <div>
+                        <h3 style="margin-bottom: 20px;">Vitamin & Mineral Utama</h3>
+                        <div class="vitamin-list">
+                            <div class="vitamin-item"><i class="fas fa-dumbbell"></i><div><strong>Protein Tinggi</strong><p style="font-size: 0.9rem; margin: 0;">Dari ayam & susu.</p></div></div>
+                            <div class="vitamin-item"><i class="fas fa-carrot"></i><div><strong>Vitamin A</strong><p style="font-size: 0.9rem; margin: 0;">Dari sayur cap cay.</p></div></div>
+                            <div class="vitamin-item"><i class="fas fa-bolt"></i><div><strong>Energi</strong><p style="font-size: 0.9rem; margin: 0;">Dari nasi & ayam.</p></div></div>
+                            <div class="vitamin-item"><i class="fas fa-bone"></i><div><strong>Kalsium</strong><p style="font-size: 0.9rem; margin: 0;">Dari susu.</p></div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Halaman Edukasi Gizi (TAMPILAN RAPI & INTERAKTIF) -->
+        <section id="edukasi" class="page-section">
+            <div class="edukasi-container">
+                <h2 class="animate-on-scroll">Pusat Edukasi Gizi</h2>
+                <p class="animate-on-scroll" style="text-align:center; max-width: 600px; margin: 0 auto 40px auto;">Pelajari berbagai informasi penting seputar gizi dan kesehatan untuk mendukung gaya hidup Anda yang lebih baik.</p>
+                <div class="edukasi-grid">
+                    <div class="edukasi-card animate-on-scroll" data-edukasi-id="air">
+                        <div class="edukasi-header">
+                            <i class="fas fa-tint edukasi-icon"></i>
+                            <h3 class="edukasi-title">Pentingnya Air Putih</h3>
+                        </div>
+                        <div class="edukasi-teaser">
+                            <p>Air adalah komponen terpenting dalam tubuh kita. Temukan mengapa dan berapa banyak Anda harus minum.</p>
+                            <a href="#" class="edukasi-link" onclick="openEdukasiModal('air'); return false;">Baca Selengkapnya →</a>
+                        </div>
+                    </div>
+                    <div class="edukasi-card animate-on-scroll" data-edukasi-id="vitamin">
+                        <div class="edukasi-header">
+                            <i class="fas fa-capsules edukasi-icon"></i>
+                            <h3 class="edukasi-title">5 Vitamin Esensial</h3>
+                        </div>
+                        <div class="edukasi-teaser">
+                            <p>Vitamin A, B, C, D, dan E. Ketahui fungsi dan sumber makanan terbaik untuk setiap vitamin.</p>
+                            <a href="#" class="edukasi-link" onclick="openEdukasiModal('vitamin'); return false;">Baca Selengkapnya →</a>
+                        </div>
+                    </div>
+                    <div class="edukasi-card animate-on-scroll" data-edukasi-id="karbohidrat">
+                        <div class="edukasi-header">
+                            <i class="fas fa-bread-slice edukasi-icon"></i>
+                            <h3 class="edukasi-title">Karbohidrat Sehat</h3>
+                        </div>
+                        <div class="edukasi-teaser">
+                            <p>Tidak semua karbohidrat buruk. Pelajari cara memilih karbohidrat yang baik untuk energi Anda.</p>
+                            <a href="#" class="edukasi-link" onclick="openEdukasiModal('karbohidrat'); return false;">Baca Selengkapnya →</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="saran" class="page-section">
+            <div class="container">
+                <h2 style="text-align:center; margin-bottom: 40px;">Kirim Saran Anda</h2>
+                <div class="suggestion-form-container">
+                    <form id="suggestion-form">
+                        <div class="form-group"><label for="name">Nama Lengkap</label><input type="text" id="name" name="name" required></div>
+                        <div class="form-group"><label for="contact">Kontak (Email / WhatsApp)</label><input type="text" id="contact" name="contact" required></div>
+                        <div class="form-group"><label for="suggestion">Saran atau Pesan Anda</label><textarea id="suggestion" name="suggestion" required></textarea></div>
+                        <button type="submit" class="btn" id="submit-btn"><i class="fas fa-paper-plane"></i> Kirim Saran</button>
+                    </form>
+                    <div id="form-status"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <!-- Modal untuk Detail Edukasi -->
+    <div id="edukasi-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeEdukasiModal()">&times;</span>
+            <div class="modal-header">
+                <i id="edukasi-modal-icon" class="modal-icon"></i>
+                <h2 id="edukasi-modal-title"></h2>
+            </div>
+            <div id="edukasi-modal-body"></div>
+        </div>
+    </div>
+
+    <footer class="footer"><p>&copy; 2025 Si Terang. Semua Hak Dilindungi. #HidupCerahBersama</p></footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // --- DATA EDUKASI GIZI (SUDAH DIPERBARUI) ---
+            const edukasiData = {
+                air: {
+                    title: "Pentingnya Air Putih",
+                    icon: "fa-tint",
+                    color: "var(--accent-color)",
+                    content: `
+                        <p>Air putih sering kali diabaikan, padahal ia adalah nutrisi paling esensial bagi kehidupan. Sekitar 60% tubuh manusia terdiri dari air, dan ia memainkan peran krusial dalam hampir semua fungsi tubuh.</p>
+                        <h4>Manfaat Utama Air Putih:</h4>
+                        <ul>
+                            <li><strong>Mengatur Suhu Tubuh:</strong> Membantu mendinginkan tubuh melalui keringat.</li>
+                            <li><strong>Mengangkut Nutrisi:</strong> Membawa vitamin dan mineral ke seluruh tubuh.</li>
+                            <li><strong>Meningkatkan Fungsi Otak:</strong> Dehidrasi ringan dapat mengurangi konsentrasi.</li>
+                            <li><strong>Melancarkan Pencernaan:</strong> Membantu melunakkan makanan dan mencegah sembelit.</li>
+                        </ul>
+                        <h4>Berapa Banyak yang Dibutuhkan?</h4>
+                        <p>Kebutuhan air setiap orang berbeda, tetapi aturan umum adalah 8 gelas (sekitar 2 liter) per hari. Kebutuhan ini bisa bertambah jika Anda aktif secara fisik atau tinggal di iklim panas. Jangan tunggu haus untuk minum!</p>
+                    `
+                },
+                vitamin: {
+                    title: "5 Vitamin Esensial",
+                    icon: "fa-capsules",
+                    color: "var(--secondary-color)",
+                    content: `
+                        <p>Vitamin adalah senyawa organik yang dibutuhkan tubuh dalam jumlah kecil untuk berfungsi dengan baik. Berikut adalah 5 vitamin utama dan fungsinya:</p>
+                        <ul>
+                            <li><strong>Vitamin A:</strong> Penting untuk penglihatan, sistem imun, dan pertumbuhan sel. Sumber: Wortel, ubi jalar, bayam.</li>
+                            <li><strong>Vitamin B Kompleks:</strong> Berperan dalam produksi energi dan kesehatan saraf. Sumber: Gandum, daging, telur, kacang-kacangan.</li>
+                            <li><strong>Vitamin C:</strong> Antioksidan kuat yang membantu melindungi sel, meningkatkan imun, dan membantu penyerapan zat besi. Sumber: Jeruk, stroberi, paprika, brokoli.</li>
+                            <li><strong>Vitamin D:</strong> Penting untuk kesehatan tulang dan gigi karena membantu penyerapan kalsium. Sumber: Sinar matahari, ikan berlemak, susu yang diperkaya.</li>
+                            <li><strong>Vitamin E:</strong> Antioksidan yang melindungi sel-sel dari kerusakan. Sumber: Kacang almond, biji bunga matahari, sayuran hijau.</li>
+                        </ul>
+                    `
+                },
+                karbohidrat: {
+                    title: "Karbohidrat Sehat",
+                    icon: "fa-bread-slice",
+                    color: "var(--primary-color)",
+                    content: `
+                        <p>Di era diet modern, karbohidrat sering menjadi kambing hitam dan dihindari. Namun, apakah pandangan ini benar?</p>
+                        <h4>Fakta: Karbohidrat adalah Sumber Energi Utama.</h4>
+                        <p>Tubuh kita, terutama otak, sangat bergantung pada karbohidrat sebagai bahan bakar utama untuk beraktivitas. Menghilangkannya secara total dapat menyebabkan kelelahan, sulit berkonsentrasi, dan suasana hati yang buruk.</p>
+                        <h4>Jenis Karbohidrat:</h4>
+                        <p>Tidak semua karbohidrat diciptakan setara. Pilihlah <strong>karbohidrat kompleks</strong> (gandum utuh, nasi merah, kacang-kacangan) yang dicerna lebih lambat dan memberikan energi tahan lama. Batasi <strong>karbohidrat sederhana</strong> (gula, tepung putih, minuman bersoda) yang dapat menyebabkan lonjakan gula darah.</p>
+                        <h4>Kesimpulan:</h4>
+                        <p>Jangan takut karbohidrat. Yang perlu dilakukan adalah menjadi <strong>pemilih yang cerdas</strong>. Pilih jenis yang tepat dan konsumsi dalam porsi wajar untuk mendapatkan manfaatnya tanpa efek samping negatif.</p>
+                    `
+                }
+            };
+
+            // --- LOGIKA UNTUK MODAL EDUKASI ---
+            function openEdukasiModal(edukasiId) {
+                const data = edukasiData[edukasiId];
+                if (!data) return;
+                document.getElementById('edukasi-modal-title').innerText = data.title;
+                const modalIcon = document.getElementById('edukasi-modal-icon');
+                modalIcon.className = `fas ${data.icon} modal-icon`;
+                modalIcon.style.color = data.color;
+                document.getElementById('edukasi-modal-body').innerHTML = data.content;
+                document.getElementById('edukasi-modal').style.display = 'flex';
+            }
+            function closeEdukasiModal() {
+                document.getElementById('edukasi-modal').style.display = 'none';
+            }
+            document.querySelectorAll('.edukasi-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    const edukasiId = card.getAttribute('data-edukasi-id');
+                    openEdukasiModal(edukasiId);
+                });
+            });
+            window.onclick = function(event) {
+                const modal = document.getElementById('edukasi-modal');
+                if (event.target == modal) {
+                    closeEdukasiModal();
+                }
+            };
+
+            // --- KODE LAINNYA (Theme, Animasi, Navigasi, Form) TETAP SAMA ---
+            const themeSwitch = document.getElementById('theme-switch');
+            const currentTheme = localStorage.getItem('theme') || 'dari';
+            document.documentElement.setAttribute('data-theme', currentTheme);
+            if (currentTheme === 'light') { themeSwitch.checked = true; document.querySelector('.ball i').className = 'fas fa-sun'; }
+            themeSwitch.addEventListener('change', function(e) {
+                if (e.target.checked) { document.documentElement.setAttribute('data-theme', 'light'); localStorage.setItem('theme', 'light'); document.querySelector('.ball i').className = 'fas fa-sun'; }
+                else { document.documentElement.setAttribute('data-theme', 'dark'); localStorage.setItem('theme', 'dark'); document.querySelector('.ball i').className = 'fas fa-moon'; }
+            });
+            const animatedElements = document.querySelectorAll('.menu-item-card, .macro-item, .vitamin-item, .edukasi-card');
+            const observerOptions = { threshold: 0.1, rootMargin: "0px 0px -50px 0px" };
+            const observer = new IntersectionObserver((entries) => { entries.forEach((entry, index) => { if (entry.isIntersecting) { setTimeout(() => { entry.target.classList.add('animate-on-scroll'); }, index * 100); observer.unobserve(entry.target); } }); }, observerOptions);
+            animatedElements.forEach(el => observer.observe(el));
+            const navLinks = document.querySelectorAll('.nav-link'); const pages = document.querySelectorAll('.page-section');
+            navLinks.forEach(link => { link.addEventListener('click', () => { const targetPageId = link.getAttribute('data-page'); navLinks.forEach(l => l.classList.remove('active')); pages.forEach(p => p.classList.remove('active')); link.classList.add('active'); document.getElementById(targetPageId).classList.add('active'); }); });
+            
+            const suggestionForm = document.getElementById('suggestion-form');
+            const submitBtn = document.getElementById('submit-btn');
+            const formStatus = document.getElementById('form-status');
+            const TELEGRAM_BOT_TOKEN = "8201638745:AAFQQiTnRSX0zIFEyrEzJ4MUewPm1iSamgg";
+            const TELEGRAM_CHAT_ID = "6132139122";
+            if (suggestionForm) {
+                suggestionForm.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    const originalBtnText = submitBtn.innerHTML;
+                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mengirim...';
+                    submitBtn.disabled = true;
+                    formStatus.style.display = 'none';
+                    const formData = new FormData(suggestionForm);
+                    const data = Object.fromEntries(formData);
+                    const message = `📩 *Saran Baru dari Si Terang Website!*\n\n👤 *Nama:* ${data.name}\n📞 *Kontak:* ${data.contact}\n💬 *Saran:*\n${data.suggestion}`;
+                    const telegramUrl = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage?chat_id=${TELEGRAM_CHAT_ID}&text=${encodeURIComponent(message)}&parse_mode=Markdown`;
+                    try {
+                        const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(telegramUrl)}`;
+                        const response = await fetch(proxyUrl);
+                        if (!response.ok) throw new Error('Gagal mengirim pesan ke Telegram.');
+                        const result = await response.json();
+                        formStatus.textContent = '✅ Saran Anda berhasil terkirim! Terima kasih.';
+                        formStatus.className = 'success';
+                        suggestionForm.reset();
+                    } catch (error) {
+                        formStatus.textContent = `❌ Error: ${error.message}`;
+                        formStatus.className = 'error';
+                    } finally {
+                        submitBtn.innerHTML = originalBtnText;
+                        submitBtn.disabled = false;
+                        formStatus.style.display = 'block';
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
